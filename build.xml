@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+
+<project name="snet" default="compile" basedir=".">
+	<property name="src.home"       value="src"/>
+	<property name="deploy.home"    value="deploy"/>
+	<property name="release.home"   value="release"/>
+	<property name="javadoc.home"   value="javadoc"/>
+	<property name="lib.home"		value="lib"/>
+
+	<target name="prepare">
+		<mkdir dir="${deploy.home}"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${deploy.home}"/>
+	</target>
+
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src.home}"
+			destdir="${deploy.home}" 
+			classpath="${lib.home}/NetExpert.jar;."
+			debug="on"
+			optimize="off"
+			deprecation="on"/>
+	</target>
+
+	<target name="test" depends="prepare">
+		<javac srcdir="test"
+			destdir="${deploy.home}"
+			debug="on"
+			optimize="off"
+			deprecation="on"/>
+	</target>
+
+	<target name="javadoc">
+		<delete dir="${javadoc.home}"/>
+		<mkdir dir="${javadoc.home}"/>
+		<javadoc sourcepath="${src.home}"
+			destdir="${javadoc.home}"
+			packagenames="NxCorba.*"
+			classpath="${lib.home}/NetExpert.jar:."
+			author="true"
+			version="true"
+			use="true"
+			charset="Shift_JIS"/>
+	</target>
+
+	<target name="all" depends="clean,prepare,compile"/>
+
+	<target name="dist" depends="compile">
+		<delete dir="${release.home}"/>
+		<mkdir dir="${release.home}"/>
+		<jar jarfile="${release.home}/NxCorba.jar"
+			basedir="${deploy.home}"
+			includes="NxCorba/**"/>
+	</target>
+</project>
